@@ -1,0 +1,30 @@
+.chatHistory {
+    height: 300px;
+    overflow-y: scroll;
+    background-color: lightcyan;
+}
+
+.chat-message {
+    margin-top: 10px;
+    margin-left: 5px;
+    border-bottom: 1px solid white;
+    font-size: small;
+}
+
+.chat-message-p1 {
+    display: flex;
+}
+
+.chat-message-text {
+    margin-left: 10px;
+}
+.chat-message-author {
+    color: darkgreen;
+}
+.chat-message-datetime {
+    font-size: smaller;
+    text-align: right;
+    color: gray;
+    font-style: italic;
+    margin-right: 5px;
+}
