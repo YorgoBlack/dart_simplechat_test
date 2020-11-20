@@ -17,4 +17,8 @@
     </nav>
   </div>
 </header>
+<div class="alert" [class.visible]="isVisible"> 
+  new message posted
+</div>
+
 <router-outlet [routes] = "Routes.all"></router-outlet>

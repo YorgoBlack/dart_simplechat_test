@@ -6,7 +6,7 @@ import 'package:chat_api_client/chat_api_client.dart';
 @Injectable()
 class WebApiClient extends ApiClient {
   WebApiClient()
-      : super(Uri.parse('http://localhost:3333'),
+      : super(Uri.parse('http://localhost:8888'),
             onBeforeRequest: (ApiRequest request) {
           if (window.localStorage.containsKey('authtoken'))
             return request.change(

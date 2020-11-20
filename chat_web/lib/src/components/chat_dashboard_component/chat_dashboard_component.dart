@@ -1,5 +1,4 @@
 import 'package:angular/angular.dart';
-import 'package:chat_models/chat_models.dart';
 import 'package:chat_web/src/components/chat_component/chat_component.dart';
 import 'package:chat_web/src/components/chat_list_component/chat_list_component.dart';
 

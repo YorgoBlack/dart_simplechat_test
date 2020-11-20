@@ -9,10 +9,12 @@ import 'package:chat_models/chat_models.dart';
 @Injectable()
 class ChatsNotifier {
   HtmlWebSocketChannel webSocketChannel;
-  StreamController<Message> onMessages$;
+  Stream<Message> onMessages$;
+  StreamController<Message> messagesStream;
 
   ChatsNotifier() {
-    onMessages$ = StreamController<Message>.broadcast();
+    messagesStream = StreamController<Message>();
+    onMessages$ = messagesStream.stream.asBroadcastStream();
   }
 
   Connect(url) {
@@ -23,13 +25,14 @@ class ChatsNotifier {
         switch (n.notificationType) {
           case NotificationType.Message:
             print(n.notificationMessage);
-            onMessages$.add(n.notificationMessage);
+            messagesStream.add(n.notificationMessage);
             break;
           default:
             break;
         }
       });
     }
+    print(webSocketChannel.closeCode);
   }
 
   Disconnect() {

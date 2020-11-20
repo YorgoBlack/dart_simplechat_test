@@ -5,7 +5,6 @@ import 'package:angular_components/angular_components.dart';
 import 'package:angular_router/angular_router.dart';
 import 'package:chat_api_client/chat_api_client.dart';
 import 'package:chat_models/chat_models.dart';
-import 'package:chat_web/routes.dart';
 import 'package:chat_web/services.dart';
 import 'package:chat_web/src/components/chat_dashboard_component/chat_dashboard_component.dart';
 
@@ -70,7 +69,7 @@ class ChatComponent implements OnActivate, OnDeactivate {
         .whenComplete(() => querySelector('.chatHistory').scrollTop = 1000000);
 
     if (subscription == null) {
-      subscription = notifier.onMessages$.stream.listen((message) {
+      subscription = notifier.onMessages$.listen((message) {
         if (message.chat == chatId) {
           messages.add(message);
           querySelector('.chatHistory').scrollTop = 1000000;
@@ -102,7 +101,7 @@ class ChatComponent implements OnActivate, OnDeactivate {
         .read(chatId)
         .whenComplete(() => querySelector('.chatHistory').scrollTop = 1000000);
     if (subscription == null) {
-      subscription = notifier.onMessages$.stream.listen((message) {
+      subscription = notifier.onMessages$.listen((message) {
         if (message.chat == chatId) {
           messages.add(message);
         }

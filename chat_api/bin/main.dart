@@ -42,7 +42,7 @@ main() async {
 
   final server = ApiServer(
       address: InternetAddress.anyIPv4,
-      port: 3333,
+      port: 8888,
       handler: shelf.Pipeline()
           .addMiddleware(CorsHeadersMiddleware({
             'Access-Control-Allow-Origin': '*',

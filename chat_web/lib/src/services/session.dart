@@ -16,14 +16,14 @@ class Session {
     if (currentUser != null) {
       notifier.Disconnect();
     }
-
+    print('set user' + json.encode(user.json));
     window.localStorage['currentUser'] = json.encode(user.json);
-    notifier.Connect('ws://localhost:3333/ws?token=' + authToken);
+    notifier.Connect('ws://localhost:8888/ws?token=' + authToken);
   }
 
   User get currentUser {
     if (window.localStorage['currentUser'] == null) return null;
-    notifier.Connect('ws://localhost:3333/ws?token=' + authToken);
+    notifier.Connect('ws://localhost:8888/ws?token=' + authToken);
     return User.fromJson(json.decode(window.localStorage['currentUser']));
   }
 

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
 import 'package:angular_router/angular_router.dart';
@@ -24,11 +26,38 @@ import 'package:rest_api_client/rest_api_client.dart';
       ClassProvider(Session)
     ],
     exports: [RoutePaths, Routes])
-class AppComponent {
+class AppComponent implements OnDeactivate {
   Session session;
-  AppComponent(this.session);
+  ChatsNotifier notifier;
+  StreamSubscription subscription;
+  bool isVisible = false;
+  Router router;
+
+  AppComponent(this.session, this.router, this.notifier) {
+    if (subscription == null) {
+      subscription = notifier.onMessages$.listen((message) {
+        showAlert();
+      });
+    }
+  }
 
   signOut() {
     session.clear();
+    router.navigate(RoutePaths.signIn.toUrl());
+  }
+
+  showAlert() {
+    if (this.isVisible) {
+      return;
+    }
+    this.isVisible = true;
+    new Timer(new Duration(seconds: 2), () => this.isVisible = false);
+  }
+
+  @override
+  void onDeactivate(RouterState current, RouterState next) {
+    if (subscription != null) {
+      subscription.cancel();
+    }
   }
 }
