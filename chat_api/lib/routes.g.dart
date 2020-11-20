@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:rest_api_server/auth_middleware.dart';
-import 'package:rest_api_server/http_exception.dart';
 import 'package:rest_api_server/service_registry.dart';
 import 'package:shelf/shelf.dart';
 import 'package:rest_api_server/src/route.dart';
@@ -82,17 +81,15 @@ final routes = <Route>[
     return makeResponseFrom(result);
   }),
   Route('GET', 'ws', (Request request) async {
-    try {
-      final reqParameters = <String, String>{};
-      reqParameters.addAll(request.requestedUri.queryParameters);
-      final token = request.url.queryParameters['token'];
-      final claim = _jwt.decode(token);
-      final _webSocketResource = WebSocketResource(claim.subject);
-      final result =
-          _webSocketResource.handleUpgradeRequest(request, request.context);
-      return makeResponseFrom(result);
-    } catch (e) {
-      throw (ForbiddenException());
-    }
+    final reqParameters = <String, String>{};
+    reqParameters.addAll(request.requestedUri.queryParameters);
+    reqParameters.addAll(request.requestedUri.queryParameters);
+    final token = request.url.queryParameters['token'];
+    final claim = _jwt.decode(token);
+
+    final _webSocketResource = WebSocketResource(claim.subject);
+    final result =
+        _webSocketResource.handleUpgradeRequest(request, request.context);
+    return makeResponseFrom(result);
   })
 ];
