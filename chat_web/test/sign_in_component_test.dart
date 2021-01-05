@@ -14,6 +14,7 @@ import 'package:pageloader/html.dart';
 import 'package:test/test.dart';
 
 import 'sign_in_component_test.template.dart' as self;
+import 'sign_in_component_po.dart';
 import 'utils.dart';
 
 class MockSession extends Mock implements Session {}

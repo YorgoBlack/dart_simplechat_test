@@ -1,14 +1,26 @@
+<div class="content">
+<div class="form-content">
+
+<h1>Login</h1>
+<div>
   <material-input
       floatingLabel
       type="text"
       label="username"
       [(ngModel)]="username"
   ></material-input>
+</div>
+<div>
   <material-input
     floatingLabel
     type="password"
     label="password"
     [(ngModel)]="password"
   ></material-input>
+</div>
+<div>
   <material-button raised (trigger)="signIn()">Sign In</material-button>
-  <a [routerLink]="RoutePaths.signUp.toUrl()">Sign Up</a>
+  <material-button [routerLink]="RoutePaths.signUp.toUrl()">Sign Up</material-button>
+</div>
+</div>
+</div>

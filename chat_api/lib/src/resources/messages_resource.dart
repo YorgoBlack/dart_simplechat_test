@@ -27,17 +27,10 @@ class MessagesResource {
     if (newMessage.chat != ChatId(chatIdStr))
       throw (BadRequestException({}, 'Wrong chat'));
     final createdMessage = await messagesCollection.insert(newMessage);
-    final chat = await chatsCollection.findOne(newMessage.chat);
-    final users = chat.members.map((user) => user.id.json).toList();
 
-    wsChannels.channels.forEach((wsChannel) {
-      if (users.contains(wsChannel.subject)) {
-        final n = Notification(
-            notificationType: NotificationType.Message,
-            notificationMessage: createdMessage);
-        wsChannel.channel.sink
-            .add(json.encode(n.json, toEncodable: toEncodable));
-      }
+    wsChannels.channels.where((e) => e.chatId == chatIdStr).forEach((channel) {
+      channel.channel.sink
+          .add(json.encode(createdMessage.json, toEncodable: toEncodable));
     });
     return createdMessage;
   }

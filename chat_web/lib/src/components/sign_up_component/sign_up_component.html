@@ -1,18 +1,26 @@
+<div class="content">
+  <div class="form-content">
+<h1>Register</h1>
+<div>
 <material-input
     floatingLabel
     type="text"
     label="Name" [(ngModel)]="name"
 ></material-input>
+</div>
+<div>
 <material-input
     floatingLabel
     type="password"
     label="password"
     [(ngModel)]="password"
 ></material-input>
-<material-button
-    raised
-    (trigger)="signUp()"
-    [disabled]="name.isEmpty || password.isEmpty"
->
+</div>
+<div>
+<material-button raised (trigger)="signUp()" [disabled]="name.isEmpty || password.isEmpty">
   Sign Up
 </material-button>
+
+</div>
+</div>
+</div>

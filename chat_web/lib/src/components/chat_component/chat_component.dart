@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:html';
 import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
@@ -6,7 +5,7 @@ import 'package:angular_router/angular_router.dart';
 import 'package:chat_api_client/chat_api_client.dart';
 import 'package:chat_models/chat_models.dart';
 import 'package:chat_web/services.dart';
-import 'package:chat_web/src/components/chat_dashboard_component/chat_dashboard_component.dart';
+import 'package:web_socket_channel/html.dart';
 
 @Component(
   selector: 'chat',
@@ -32,63 +31,33 @@ import 'package:chat_web/src/components/chat_dashboard_component/chat_dashboard_
 )
 class ChatComponent implements OnActivate, OnDeactivate {
   MessagesClient messagesClient;
+  ChatsClient chatsClient;
   Router router;
   Session session;
-  ChatsNotifier notifier;
-  StreamSubscription subscription;
-  ChatId chatId;
   Chat chat;
+  ChatId chatId;
   List<Message> messages;
   String newMessageText = '';
+  HtmlWebSocketChannel webSocketChannel;
 
-  ChatComponent(this.messagesClient, this.router, this.session, this.notifier);
-
-  ChatDashboardComponent _parent;
-  @Input()
-  set parent(ChatDashboardComponent value) => _parent = value;
-  get parent => _parent;
+  ChatComponent(this.messagesClient, this.router, this.session);
 
   String getChatMembers() => chat.members
       .where((x) => x.id != session.currentUser.id)
       .map((user) => user.name)
       .join(', ');
 
-  closeChat() {
-    if (subscription != null) {
-      subscription.cancel();
-    }
-    chatId = null;
-    chat = null;
-  }
-
-  openChat(Chat _chat) async {
-    chat = _chat;
-    chatId = chat.id;
-    messages = await messagesClient
-        .read(chatId)
-        .whenComplete(() => querySelector('.chatHistory').scrollTop = 1000000);
-
-    if (subscription == null) {
-      subscription = notifier.onMessages$.listen((message) {
-        if (message.chat == chatId) {
-          messages.add(message);
-          querySelector('.chatHistory').scrollTop = 1000000;
-        }
-      });
-    }
-  }
-
   send() async {
     final newMessage = Message(
-        chat: chatId,
+        chat: chat.id,
         author: session.currentUser,
         text: newMessageText,
         createdAt: DateTime.now());
     try {
       await messagesClient.create(newMessage);
     } on HttpException catch (e) {
-      print('Sending message failed');
       print(e);
+      print('Sending message failed');
     }
 
     newMessageText = '';
@@ -100,19 +69,16 @@ class ChatComponent implements OnActivate, OnDeactivate {
     messages = await messagesClient
         .read(chatId)
         .whenComplete(() => querySelector('.chatHistory').scrollTop = 1000000);
-    if (subscription == null) {
-      subscription = notifier.onMessages$.listen((message) {
-        if (message.chat == chatId) {
-          messages.add(message);
-        }
-      });
-    }
+
+    final url = Uri.parse('http://localhost:8888/ws/' + chatId.json);
+    webSocketChannel = HtmlWebSocketChannel.connect(url);
+    webSocketChannel.stream.listen((msg) {
+      messages.add(msg);
+    });
   }
 
   @override
   onDeactivate(RouterState current, _) {
-    if (subscription != null) {
-      subscription.cancel();
-    }
+    webSocketChannel.sink.close();
   }
 }

@@ -3,22 +3,19 @@
     <material-button icon class="material-drawer-button">
       <material-icon icon="menu"></material-icon>
     </material-button>
-    <div class="material-spacer"></div>
+    <span>Simple chat</span>
+    <span class="menu-spacer"></span>
     <nav *ngIf="session.currentUser == null" class="material-navigation">
-      <a [routerLink]="RoutePaths.signIn.toUrl()">Sign In</a>
+        <a [routerLink]="RoutePaths.signIn.toUrl()">Sign In</a>
     </nav>
-    
-    <div class="material-spacer"></div>
+
     <nav *ngIf="session.currentUser != null" class="material-navigation">
-      <span  class="material-header-title">{{ session.currentUser?.name }}</span>
-      <a [routerLink]="RoutePaths.chatdashboard.toUrl()">Chats</a>
-      <a [routerLink]="RoutePaths.profile.toUrl()">Profile</a>
-      <a (click)="signOut()" href='#'>Exit</a>
+      <a [routerLink]="RoutePaths.chats.toUrl()">Chats</a>
+      <material-menu [menu]="menuModel" icon="menu" buttonText="{{ session.currentUser?.name }}">
+        
+      </material-menu>
     </nav>
   </div>
 </header>
-<div class="alert" [class.visible]="isVisible"> 
-  new message posted
-</div>
 
 <router-outlet [routes] = "Routes.all"></router-outlet>

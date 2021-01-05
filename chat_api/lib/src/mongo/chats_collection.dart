@@ -5,7 +5,7 @@ import 'package:mongo_dart/mongo_dart.dart' as mongo;
 import 'package:rest_api_server/mongo_collection.dart';
 
 /// Chats Collection
-/// 
+///
 /// Implements basic operations with MongoDb chats collection
 class ChatsCollection extends MongoCollection<Chat, ChatId> {
   ChatsCollection(mongo.DbCollection collection) : super(collection);

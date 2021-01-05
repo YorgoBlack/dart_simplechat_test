@@ -10,8 +10,6 @@ import 'package:chat_web/src/components/chat_list_component/chat_list_component.
     as chatListComponentTemplate;
 import 'package:chat_web/src/components/chat_component/chat_component.template.dart'
     as chatComponentTemplate;
-import 'package:chat_web/src/components/chat_dashboard_component/chat_dashboard_component.template.dart'
-    as chatDashboardComponentTemplate;
 
 class Routes {
   static final profile = RouteDefinition(
@@ -26,11 +24,6 @@ class Routes {
       routePath: RoutePaths.signUp,
       component: signUpComponentTemplate.SignUpComponentNgFactory);
 
-  static final chatDashboard = RouteDefinition(
-      routePath: RoutePaths.chatdashboard,
-      component:
-          chatDashboardComponentTemplate.ChatDashboardComponentNgFactory);
-
   static final chats = RouteDefinition(
       routePath: RoutePaths.chats,
       component: chatListComponentTemplate.ChatListComponentNgFactory);
@@ -39,12 +32,5 @@ class Routes {
       routePath: RoutePaths.chat,
       component: chatComponentTemplate.ChatComponentNgFactory);
 
-  static final all = <RouteDefinition>[
-    profile,
-    signIn,
-    signUp,
-    chats,
-    chat,
-    chatDashboard
-  ];
+  static final all = <RouteDefinition>[profile, signIn, signUp, chats, chat];
 }

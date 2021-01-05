@@ -6,7 +6,6 @@ import 'package:chat_models/chat_models.dart';
 import 'package:chat_web/components.dart';
 import 'package:chat_web/routes.dart';
 import 'package:chat_web/services.dart';
-import 'package:chat_web/src/components/chat_dashboard_component/chat_dashboard_component.dart';
 
 @Component(
     selector: 'chat-list',
@@ -16,6 +15,8 @@ import 'package:chat_web/src/components/chat_dashboard_component/chat_dashboard_
     ],
     directives: [
       coreDirectives,
+      materialInputDirectives,
+      routerDirectives,
       MaterialListComponent,
       MaterialListItemComponent,
       MaterialButtonComponent,
@@ -36,31 +37,29 @@ class ChatListComponent implements OnInit {
 
   List<Chat> chats = [];
   bool showCreateChatDialog = false;
-
-  ChatDashboardComponent _parent;
-  @Input()
-  set parent(ChatDashboardComponent value) => _parent = value;
-  get parent => _parent;
+  String chatName = '';
 
   @ViewChild(UsersListComponent)
   UsersListComponent usersList;
 
   ChatListComponent(this.session, this.chatsClient, this.router);
 
-  String getChatMembers(ChatId chatId) => chats
-      .firstWhere((chat) => chat.id == chatId)
-      .members
-      .map((user) => user.name)
-      .join(', ');
+  String getChatMembers(ChatId chatId) {
+    final chat = chats.firstWhere((chat) => chat.id == chatId);
+    return chat.chatName == null
+        ? chat.members.map((user) => user.name).join(', ')
+        : chat.chatName;
+  }
 
   void selectChat(Chat chat) {
-    _parent.chatComponent.openChat(chat);
-    //router.navigate(RoutePaths.chat.toUrl(parameters: {'chatId': chatId.json}));
+    router
+        .navigate(RoutePaths.chat.toUrl(parameters: {'chatId': chat.id.json}));
   }
 
   void createChat() async {
     try {
       final newChat = await chatsClient.create(Chat(
+          chatName: chatName,
           members: usersList.selectedUsers.selectedValues.toList()
             ..add(session.currentUser)));
       chats.add(newChat);

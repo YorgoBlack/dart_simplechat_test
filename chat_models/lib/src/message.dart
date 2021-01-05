@@ -2,9 +2,8 @@ import 'package:data_model/data_model.dart';
 
 import 'chat.dart';
 import 'user.dart';
-import 'inotification.dart';
 
-class Message implements Model<MessageId>, INotificationMessage {
+class Message implements Model<MessageId> {
   MessageId id;
   ChatId chat;
   User author;

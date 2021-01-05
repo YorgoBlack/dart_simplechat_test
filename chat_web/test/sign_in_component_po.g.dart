@@ -26,39 +26,12 @@ class $$SignInComponentPO {
   PageLoaderElement $__root__;
   PageLoaderMouse __mouse__;
   PageLoaderElement get $root => $__root__;
-  PageLoaderElement get usernameInput {
-    for (final __listener in $__root__.listeners) {
-      __listener.startPageObjectMethod('SignInComponentPO', 'usernameInput');
-    }
-    final element =
-        $__root__.createElement(First(ByCss('input[type=text]')), [], []);
-    final returnMe = element;
-    for (final __listener in $__root__.listeners) {
-      __listener.endPageObjectMethod('SignInComponentPO', 'usernameInput');
-    }
-    return returnMe;
-  }
-
-  PageLoaderElement get psswordInput {
-    for (final __listener in $__root__.listeners) {
-      __listener.startPageObjectMethod('SignInComponentPO', 'psswordInput');
-    }
-    final element =
-        $__root__.createElement(First(ByCss('input[type=password]')), [], []);
-    final returnMe = element;
-    for (final __listener in $__root__.listeners) {
-      __listener.endPageObjectMethod('SignInComponentPO', 'psswordInput');
-    }
-    return returnMe;
-  }
-
   PageLoaderElement get usernameMaterialInput {
     for (final __listener in $__root__.listeners) {
       __listener.startPageObjectMethod(
           'SignInComponentPO', 'usernameMaterialInput');
     }
-    final element = $__root__
-        .createElement(First(ByCss('material-input[type=text]')), [], []);
+    final element = $__root__.createElement(ByTagName('button'), [], []);
     final returnMe = element;
     for (final __listener in $__root__.listeners) {
       __listener.endPageObjectMethod(
@@ -72,8 +45,7 @@ class $$SignInComponentPO {
       __listener.startPageObjectMethod(
           'SignInComponentPO', 'passwordMaterialInput');
     }
-    final element = $__root__
-        .createElement(First(ByCss('material-input[type=password]')), [], []);
+    final element = $__root__.createElement(ByTagName('button'), [], []);
     final returnMe = element;
     for (final __listener in $__root__.listeners) {
       __listener.endPageObjectMethod(
@@ -86,11 +58,34 @@ class $$SignInComponentPO {
     for (final __listener in $__root__.listeners) {
       __listener.startPageObjectMethod('SignInComponentPO', 'signInButton');
     }
-    final element =
-        $__root__.createElement(First(ByCss('material-button')), [], []);
+    final element = $__root__.createElement(ByTagName('button'), [], []);
     final returnMe = element;
     for (final __listener in $__root__.listeners) {
       __listener.endPageObjectMethod('SignInComponentPO', 'signInButton');
+    }
+    return returnMe;
+  }
+
+  PageLoaderElement get usernameInput {
+    for (final __listener in $__root__.listeners) {
+      __listener.startPageObjectMethod('SignInComponentPO', 'usernameInput');
+    }
+    final element = $__root__.createElement(ByTagName('button'), [], []);
+    final returnMe = element;
+    for (final __listener in $__root__.listeners) {
+      __listener.endPageObjectMethod('SignInComponentPO', 'usernameInput');
+    }
+    return returnMe;
+  }
+
+  PageLoaderElement get psswordInput {
+    for (final __listener in $__root__.listeners) {
+      __listener.startPageObjectMethod('SignInComponentPO', 'psswordInput');
+    }
+    final element = $__root__.createElement(ByTagName('button'), [], []);
+    final returnMe = element;
+    for (final __listener in $__root__.listeners) {
+      __listener.endPageObjectMethod('SignInComponentPO', 'psswordInput');
     }
     return returnMe;
   }

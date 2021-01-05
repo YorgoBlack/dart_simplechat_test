@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
+import 'package:angular_components/model/menu/menu.dart';
 import 'package:angular_router/angular_router.dart';
 import 'package:chat_web/routes.dart';
 import 'package:chat_web/services.dart';
@@ -18,32 +19,44 @@ import 'package:rest_api_client/rest_api_client.dart';
       coreDirectives,
       MaterialButtonComponent,
       MaterialIconComponent,
+      DropdownMenuComponent,
+      MaterialMenuComponent,
       routerDirectives
     ],
     providers: [
+      popupBindings,
       ClassProvider(ApiClient, useClass: WebApiClient),
-      ClassProvider(ChatsNotifier),
       ClassProvider(Session)
     ],
     exports: [RoutePaths, Routes])
 class AppComponent implements OnDeactivate {
   Session session;
-  ChatsNotifier notifier;
-  StreamSubscription subscription;
   bool isVisible = false;
   Router router;
 
-  AppComponent(this.session, this.router, this.notifier) {
-    if (subscription == null) {
-      subscription = notifier.onMessages$.listen((message) {
-        showAlert();
-      });
-    }
+  final menuModel_1 = MenuModel<MenuItem>([
+    MenuItemGroup<MenuItem>([MenuItem('Profile'), MenuItem('SignOut')])
+  ]);
+
+  MenuModel menuModel;
+
+  AppComponent(this.session, this.router) {
+    menuModel = MenuModel<MenuItem>([
+      MenuItemGroup<MenuItem>([
+        MenuItem('Profile',
+            action: () => router.navigate(RoutePaths.profile.toUrl())),
+        MenuItem('SignOut', action: () => signOut()),
+      ])
+    ]);
   }
 
   signOut() {
     session.clear();
     router.navigate(RoutePaths.signIn.toUrl());
+  }
+
+  nav_profile() {
+    ;
   }
 
   showAlert() {
@@ -55,9 +68,5 @@ class AppComponent implements OnDeactivate {
   }
 
   @override
-  void onDeactivate(RouterState current, RouterState next) {
-    if (subscription != null) {
-      subscription.cancel();
-    }
-  }
+  void onDeactivate(RouterState current, RouterState next) {}
 }

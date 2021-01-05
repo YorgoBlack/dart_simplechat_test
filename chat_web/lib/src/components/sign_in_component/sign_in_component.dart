@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
 import 'package:angular_router/angular_router.dart';
@@ -37,8 +39,7 @@ class SignInComponent {
       session.currentUser = user;
       router.navigate(RoutePaths.profile.toUrl());
     } on HttpException catch (e) {
-      print('Login failed');
-      print(e);
+      Notification(e.message);
     }
   }
 }

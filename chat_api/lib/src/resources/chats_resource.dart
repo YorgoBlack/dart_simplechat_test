@@ -21,6 +21,13 @@ class ChatsResource {
     return chatsCollection.find(query).toList();
   }
 
+  @Get(path: '{chatIdStr}')
+  Future<Chat> getChat(String chatIdStr, Map context) {
+    final currentUser = User.fromJson(context['payload']);
+    if (currentUser == null) throw (ForbiddenException());
+    return chatsCollection.findOne(ChatId(chatIdStr));
+  }
+
   /// Creates new chat in database
   @Post()
   Future<Chat> create(Map requestBody, Map context) async {

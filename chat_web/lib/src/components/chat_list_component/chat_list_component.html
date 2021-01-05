@@ -13,6 +13,11 @@
 <modal [visible]="showCreateChatDialog">
   <material-dialog class="basic-scrolling-dialog">
     <h1 header>New chat</h1>
+    <div>
+    <material-input type="text" floatingLabel label="Enter chat name" [(ngModel)]="chatName">
+    </material-input>
+    </div>
+    <span>Select users</span>
     <users-list></users-list>
     <div footer>
       <material-button (trigger)="showCreateChatDialog = false">

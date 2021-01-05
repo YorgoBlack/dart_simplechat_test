@@ -14,6 +14,9 @@
 		},
 		{
 			"path": "chat_api"
+		},
+		{
+			"path": "chat_patch"
 		}
 	]
 }

@@ -15,9 +15,13 @@ import 'package:chat_web/services.dart';
     directives: [
       MaterialButtonComponent,
       materialInputDirectives,
+      routerDirectives
     ],
     providers: [
       ClassProvider(UsersClient),
+    ],
+    exports: [
+      RoutePaths
     ])
 class SignUpComponent {
   String name = '';

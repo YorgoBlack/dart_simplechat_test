@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'package:rest_api_server/auth_middleware.dart';
-import 'package:rest_api_server/service_registry.dart';
 import 'package:shelf/shelf.dart';
 import 'package:rest_api_server/src/route.dart';
 import 'package:chat_api/src/resources/chats_resource.dart';
@@ -11,23 +9,35 @@ import 'package:chat_api/src/resources/web_socket_resource.dart';
 final _chatsResource = ChatsResource();
 final _messagesResource = MessagesResource();
 final _usersResource = UsersResource();
-final Jwt _jwt = locateService<Jwt>();
-
+final _webSocketResource = WebSocketResource();
 final routes = <Route>[
-  Route('GET', 'chats', (Request request) async {
+  Route('GET*', 'chats', (Request request) async {
     final reqParameters = <String, String>{};
     reqParameters.addAll(request.requestedUri.queryParameters);
     final result = _chatsResource.read(request.context);
     return makeResponseFrom(result);
   }),
-  Route('POST', 'chats', (Request request) async {
+  Route('GET*', 'chats/{chatIdStr}', (Request request) async {
+    final offset = (List.from(request.requestedUri.pathSegments)
+              ..removeWhere((segment) => segment.isEmpty))
+            .length -
+        2;
+    final reqParameters = <String, String>{
+      'chatIdStr': request.requestedUri.pathSegments[1 + offset]
+    };
+    reqParameters.addAll(request.requestedUri.queryParameters);
+    final result =
+        _chatsResource.getChat(reqParameters['chatIdStr'], request.context);
+    return makeResponseFrom(result);
+  }),
+  Route('POST*', 'chats', (Request request) async {
     final reqParameters = <String, String>{};
     reqParameters.addAll(request.requestedUri.queryParameters);
     final result = _chatsResource.create(
         json.decode(await request.readAsString()), request.context);
     return makeResponseFrom(result);
   }),
-  Route('POST', 'chats/{chatIdStr}/messages', (Request request) async {
+  Route('POST*', 'chats/{chatIdStr}/messages', (Request request) async {
     final offset = (List.from(request.requestedUri.pathSegments)
               ..removeWhere((segment) => segment.isEmpty))
             .length -
@@ -40,7 +50,7 @@ final routes = <Route>[
         json.decode(await request.readAsString()), request.context);
     return makeResponseFrom(result);
   }),
-  Route('GET', 'chats/{chatIdStr}/messages', (Request request) async {
+  Route('GET*', 'chats/{chatIdStr}/messages', (Request request) async {
     final offset = (List.from(request.requestedUri.pathSegments)
               ..removeWhere((segment) => segment.isEmpty))
             .length -
@@ -53,43 +63,57 @@ final routes = <Route>[
         _messagesResource.read(reqParameters['chatIdStr'], request.context);
     return makeResponseFrom(result);
   }),
-  Route('POST', 'users/login', (Request request) async {
+  Route('POST*', 'users/login', (Request request) async {
     final reqParameters = <String, String>{};
     reqParameters.addAll(request.requestedUri.queryParameters);
     final result =
         _usersResource.login(json.decode(await request.readAsString()));
     return makeResponseFrom(result);
   }),
-  Route('POST', 'users', (Request request) async {
+  Route('POST*', 'users', (Request request) async {
     final reqParameters = <String, String>{};
     reqParameters.addAll(request.requestedUri.queryParameters);
     final result = _usersResource.create(
         json.decode(await request.readAsString()), request.context);
     return makeResponseFrom(result);
   }),
-  Route('PATCH', 'users', (Request request) async {
+  Route('PATCH*', 'users', (Request request) async {
     final reqParameters = <String, String>{};
     reqParameters.addAll(request.requestedUri.queryParameters);
     final result = _usersResource.update(
         json.decode(await request.readAsString()), request.context);
     return makeResponseFrom(result);
   }),
-  Route('GET', 'users', (Request request) async {
+  Route('GET*', 'users', (Request request) async {
     final reqParameters = <String, String>{};
     reqParameters.addAll(request.requestedUri.queryParameters);
     final result = _usersResource.read(reqParameters['name'], request.context);
     return makeResponseFrom(result);
   }),
-  Route('GET', 'ws', (Request request) async {
-    final reqParameters = <String, String>{};
+  Route('GET*', 'ws/{chatIdStr}', (Request request) async {
+    final offset = (List.from(request.requestedUri.pathSegments)
+              ..removeWhere((segment) => segment.isEmpty))
+            .length -
+        2;
+    final reqParameters = <String, String>{
+      'chatIdStr': request.requestedUri.pathSegments[1 + offset]
+    };
     reqParameters.addAll(request.requestedUri.queryParameters);
+    final result = _webSocketResource.handleUpgradeRequest(
+        reqParameters['chatIdStr'], request, request.context);
+    return makeResponseFrom(result);
+  }),
+  Route('DELETE*', 'ws/{chatIdStr}', (Request request) async {
+    final offset = (List.from(request.requestedUri.pathSegments)
+              ..removeWhere((segment) => segment.isEmpty))
+            .length -
+        2;
+    final reqParameters = <String, String>{
+      'chatIdStr': request.requestedUri.pathSegments[1 + offset]
+    };
     reqParameters.addAll(request.requestedUri.queryParameters);
-    final token = request.url.queryParameters['token'];
-    final claim = _jwt.decode(token);
-
-    final _webSocketResource = WebSocketResource(claim.subject);
-    final result =
-        _webSocketResource.handleUpgradeRequest(request, request.context);
+    final result = _webSocketResource.deleteChannel(
+        reqParameters['chatIdStr'], request, request.context);
     return makeResponseFrom(result);
   })
 ];

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:chat_api/collections.dart';
 import 'package:chat_api/helpers.dart';
 // ignore: uri_has_not_been_generated
-import 'package:chat_api/routes.g.dart' as generated;
+import 'package:chat_api/routes.gp.dart' as generated;
 import 'package:mongo_dart/mongo_dart.dart' as mongo;
 import 'package:rest_api_server/api_server.dart';
 import 'package:rest_api_server/auth_middleware.dart';
