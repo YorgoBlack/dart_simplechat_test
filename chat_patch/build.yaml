@@ -1,0 +1,20 @@
+builders:
+  resource_info_builder:
+    import: "package:chat_patch/builder.dart"
+    builder_factories: ["resourceInfoBuilder"]
+    build_extensions: {".dart": [".resource_p.info"]}
+    auto_apply: dependents
+    build_to: cache
+  router_builder:
+    import: "package:chat_patch/builder.dart"
+    builder_factories: ["routesBuilder"]
+    build_extensions: {"$lib$": ["routes.gp.dart"]}
+    auto_apply: dependents
+    build_to: source
+targets:
+  $default:
+    builders:
+      rest_api_server|resource_info_builder:
+        generate_for:
+          - lib/**.dart
+      rest_api_server|router_builder:

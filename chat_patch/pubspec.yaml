@@ -1,0 +1,16 @@
+name: chat_patch
+description: Library for patching routes in rest_api_server
+version: 1.1.0
+homepage: https://www.example.com
+author: Candidate_N_  
+
+environment:
+  sdk: '>=2.7.0 <3.0.0'
+
+dependencies:
+  rest_api_server:
+    git:
+      url: https://gitlab.com/dartrest/rest_api_server.git
+      ref: 2.2.3
+dev_dependencies:
+  test: ^1.15.2
